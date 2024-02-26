@@ -1,4 +1,4 @@
-package org.ksu.swe6673.testinpeace.resumebuilderui;
+package org.ksu.swe6673.testinpeace.resumebuilder;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;

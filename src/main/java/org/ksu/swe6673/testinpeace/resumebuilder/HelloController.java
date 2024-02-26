@@ -1,4 +1,4 @@
-package org.ksu.swe6673.testinpeace.resumebuilderui;
+package org.ksu.swe6673.testinpeace.resumebuilder;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
