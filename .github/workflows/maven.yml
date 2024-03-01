@@ -13,9 +13,6 @@ env:
 
 on:
   push:
-    paths:
-      - src/**
-      - .github/workflows/**
   workflow_dispatch: # allows manual execution of the workflow
 
 jobs:
