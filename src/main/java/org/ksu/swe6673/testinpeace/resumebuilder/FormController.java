@@ -7,45 +7,45 @@ import javafx.scene.control.TextField;
 
 public class FormController {
     @FXML
-    TextField firstName;
+    TextField firstName = new TextField("Default First Name");
     @FXML
-    TextField lastName;
+    TextField lastName = new TextField("Default Last Name");
     @FXML
-    TextField address;
+    TextField address = new TextField("Default Address");
     @FXML
-    TextField contactInfo;
+    TextField contactInfo = new TextField("Default Contact Info");
     @FXML
-    TextField email;
+    TextField email = new TextField("Default email");
     @FXML
-    TextField linkedin;
+    TextField linkedin = new TextField("Default LinkedIn");
     @FXML
-    TextField github;
+    TextField github = new TextField("Default Github");
     @FXML
-    TextField phone;
+    TextField phone = new TextField("Default Phone");
     @FXML
-    TextField workHistory;
+    TextField workHistory = new TextField("Default Work History");
     @FXML
-    TextField workYears;
+    TextField workYears = new TextField("Default Years");
     @FXML
-    TextField company;
+    TextField company = new TextField("Default Company");
     @FXML
-    TextField role;
+    TextField role = new TextField("Default Role");
     @FXML
-    TextField description;
+    TextField description = new TextField("Default Description");
     @FXML
-    TextField education;
+    TextField education = new TextField("Default Education");
     @FXML
-    TextField schoolYears;
+    TextField schoolYears = new TextField("Default School Years");
     @FXML
-    TextField degree;
+    TextField degree = new TextField("Default Degree");
     @FXML
-    TextField school;
+    TextField school = new TextField("Default School");
     @FXML
-    TextField major;
+    TextField major = new TextField("Default Major");
     @FXML
-    TextField gpa;
+    TextField gpa = new TextField("Default GPA");
     @FXML
-    TextField status;
+    TextField status = new TextField("Default Status");
 
     @FXML
     Label submitLabel;

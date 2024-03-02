@@ -11,7 +11,8 @@ public class FormApplication extends Application {
     @Override
     public void start(Stage stage) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(FormApplication.class.getResource("form.fxml"));
-        Scene scene = new Scene(fxmlLoader.load(), 320, 240);
+        //Scene scene = new Scene(fxmlLoader.load(), 320, 240);
+        Scene scene = new Scene(fxmlLoader.load(), 900, 750);
         stage.setTitle("Resume Builder");
         stage.setScene(scene);
         stage.show();
