@@ -29,5 +29,5 @@ jobs:
           distribution: corretto
           cache: maven
 
-      - name: Verify and install
-        run: mvn -B verify install
+      - name: Install
+        run: mvn -B install
