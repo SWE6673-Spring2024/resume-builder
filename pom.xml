@@ -90,7 +90,7 @@
                         <id>default-cli</id>
                         <configuration>
                             <mainClass>
-                                org.ksu.swe6673.testinpeace.resumebuilder/org.ksu.swe6673.testinpeace.resumebuilder.HelloApplication
+                                org.ksu.swe6673.testinpeace.resumebuilder/org.ksu.swe6673.testinpeace.resumebuilder.FormApplication
                             </mainClass>
                             <launcher>app</launcher>
                             <jlinkZipName>app</jlinkZipName>

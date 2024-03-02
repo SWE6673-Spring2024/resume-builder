@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class HelloApplicationTest {
+class FormApplicationTest {
 
     @BeforeEach
     void setUp() {
@@ -59,4 +59,5 @@ class HelloApplicationTest {
     @Test
     void main() {
     }
+
 }
