@@ -7,7 +7,45 @@ import javafx.scene.control.TextField;
 
 public class FormController {
     @FXML
-    TextField inputName;
+    TextField firstName;
+    @FXML
+    TextField lastName;
+    @FXML
+    TextField address;
+    @FXML
+    TextField contactInfo;
+    @FXML
+    TextField email;
+    @FXML
+    TextField linkedin;
+    @FXML
+    TextField github;
+    @FXML
+    TextField phone;
+    @FXML
+    TextField workHistory;
+    @FXML
+    TextField workYears;
+    @FXML
+    TextField company;
+    @FXML
+    TextField role;
+    @FXML
+    TextField description;
+    @FXML
+    TextField education;
+    @FXML
+    TextField schoolYears;
+    @FXML
+    TextField degree;
+    @FXML
+    TextField school;
+    @FXML
+    TextField major;
+    @FXML
+    TextField gpa;
+    @FXML
+    TextField status;
 
     @FXML
     Label submitLabel;
@@ -17,6 +55,7 @@ public class FormController {
 
     @FXML
     protected void onSubmitButtonClick() {
-        submitLabel.setText(inputName.getText());
+        submitLabel.setText("Submitted");
     }
+
 }
