@@ -17,6 +17,6 @@ class FormControllerTest {
     }
 
     @Test
-    void onHelloButtonClick() {
+    void onSubmitButtonClick() {
     }
 }
