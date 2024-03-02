@@ -29,21 +29,5 @@ jobs:
           distribution: corretto
           cache: maven
 
-      - name: Build
-        run: mvn -B package -f pom.xml
-
-  test:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Check out code
-        uses: actions/checkout@v4
-
-      - name: Set up JDK ${{ env.JAVA_VERSION }}
-        uses: actions/setup-java@v4
-        with:
-          java-version: ${{ env.JAVA_VERSION }}
-          distribution: corretto
-          cache: maven
-
-      - name: Test
-        run: mvn -B test
+      - name: Verify and install
+        run: mvn -B verify install
