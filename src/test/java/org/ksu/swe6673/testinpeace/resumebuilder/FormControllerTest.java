@@ -7,17 +7,14 @@ import javafx.stage.Stage;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.testfx.*;
-import org.testfx.api.FxToolkit;
 import org.testfx.framework.junit5.ApplicationTest;
-import javafx.scene.input.MouseButton;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class FormControllerTest  extends ApplicationTest {
+class FormControllerTest extends ApplicationTest {
 
     @Override
-    public void start (Stage stage) throws Exception {
+    public void start(Stage stage) throws Exception {
         Parent mainNode = FXMLLoader.load(FormController.class.getResource("form.fxml"));
         stage.setScene(new Scene(mainNode));
         stage.show();
@@ -36,8 +33,9 @@ class FormControllerTest  extends ApplicationTest {
     void onSubmitButtonClick() {
     }
 
+    @Test
     void TwoPlusTwoEqualsFour() {
-        //clickOn();
+        // clickOn();
         int firstTwo = 2;
         int secondTwo = 2;
 
@@ -47,7 +45,7 @@ class FormControllerTest  extends ApplicationTest {
     }
 
     @Test
-    void FirstNameNullValue(){
+    void FirstNameNullValue() {
 
         FormController myFormController = new FormController();
 
