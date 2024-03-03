@@ -16,7 +16,7 @@ on:
   workflow_dispatch: # allows manual execution of the workflow
 
 jobs:
-  build:
+  install:
     runs-on: ubuntu-latest
     steps:
       - name: Check out code
@@ -28,6 +28,18 @@ jobs:
           java-version: ${{ env.JAVA_VERSION }}
           distribution: corretto
           cache: maven
+
+      - name: Compile
+        run: mvn -B compile
+
+      - name: Unit Tests
+        run: mvn -B test
+        
+      - name: Package
+        run: mvn -B package
+
+      - name: Integration Tests
+        run: mvn -B verify
 
       - name: Install
         run: mvn -B install
