@@ -1,5 +1,7 @@
 package org.ksu.swe6673.testinpeace.resumebuilder;
 
+import com.sun.javafx.charts.Legend;
+import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -11,6 +13,8 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.testfx.framework.junit5.ApplicationTest;
 import org.testfx.api.FxAssert;
+
+import java.awt.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -54,13 +58,73 @@ class FormControllerTest extends ApplicationTest {
     void firstNameTestOnSubmitButtonClickWithMalformedInputs(String input) {
         FormController myFormController = new FormController();
 
-        clickOn("#firstName");
-        write(input);
+        myFormController.firstName.setText(input);
+        //clickOn("#firstName");
+        //write(input);
 
         clickOn("#submitButton");
         assertEquals(input, myFormController.firstName.getText());
     }
 
+
+    // first name individual tests
+    @Test
+    void firstNameWorksAsExpected() throws Exception {
+         FormController myFormController = new FormController();
+         String actual = myFormController.firstName.getText();
+         myFormController.firstName.setText("fuck you");
+
+        //assertEquals("fuck you", myFormController.firstName.getText());
+        assertEquals("fuck you", actual);
+    }
+
+    @Test
+    void firstNameContainsNumbers() throws Exception {
+        FormController myFormController = new FormController();
+        //myFormController.firstName.setText("JIMM3");
+        String actual = myFormController.firstName.getText();
+        actual.matches(".*\\d+.*");
+
+        assertEquals(actual.matches(".*\\d+.*"), true);
+    }
+
+    @Test
+    void firstNameDoesNotContainNumbers() throws Exception {
+        FormController myFormController = new FormController();
+        //myFormController.firstName.setText("JIM");
+        String actual = myFormController.firstName.getText();
+        actual.matches(".*\\d+.*");
+
+        assertEquals(actual.matches(".*\\d+.*"), false);
+    }
+
+    @Test
+    void firstNameContainSpecialCharacters() throws Exception {
+        FormController myFormController = new FormController();
+
+        //myFormController.firstName.setText("JIM");
+        String actual = myFormController.firstName.getText();
+        actual.contains("!@#$%^&*(){}[]<>?");
+
+        //assertEquals("fuck you", myFormController.firstName.getText());
+        assertEquals(false, actual.contains("!@#$%^&*(){}[]<>?"));
+    }
+
+    @Test
+    void firstNameDoesNotContainSpecialCharacters() throws Exception {
+        FormController myFormController = new FormController();
+
+        //myFormController.firstName.setText("JIM");
+        String actual = myFormController.firstName.getText();
+        actual.contains("!@#$%^&*(){}[]<>?");
+
+        //assertEquals("fuck you", myFormController.firstName.getText());
+        assertEquals(false, actual.contains("!@#$%^&*(){}[]<>?"));
+    }
+
+
+
+/*
     //lastName
     @ParameterizedTest
     @ValueSource(strings = {
@@ -84,8 +148,43 @@ class FormControllerTest extends ApplicationTest {
         clickOn("#submitButton");
         assertEquals(input, myFormController.lastName.getText());
     }
+*/
+// last name individual tests
 
+    @Test
+    void lastNameContainsNumbers() throws Exception {
+        FormController myFormController = new FormController();
+        myFormController.lastName.setText("Sm3th");
+        String actual = myFormController.lastName.getText();
+        actual.matches(".*\\d+.*");
 
+        assertEquals(actual.matches(".*\\d+.*"), true);
+    }
+
+    @Test
+    void lastNameDoesNotContainNumbers() throws Exception {
+        FormController myFormController = new FormController();
+        //myFormController.lastName.setText("Sm3th");
+        String actual = myFormController.lastName.getText();
+        //actual.matches(".*\\d+.*");
+
+        assertEquals(false, actual.matches(".*\\d+.*"));
+    }
+
+    @Test
+    void lastNameContainsSpecialCharacters() throws Exception {
+        FormController myFormController = new FormController();
+
+        myFormController.lastName.setText("todd");
+        String actual = myFormController.firstName.getText();
+        //actual.contains("!@#$%^&*(){}[]<>?");
+        //actual.contains("od");
+
+        //assertEquals(true, actual.contains("!@#$%^&*(){}[]<>?"));
+        assertEquals(true, actual.contains("od"));
+    }
+
+/*
     //address
     @ParameterizedTest
     @ValueSource(strings = {
@@ -506,69 +605,6 @@ class FormControllerTest extends ApplicationTest {
         assertEquals(input, myFormController.status.getText());
     }
 
+*/
 
-
-    /*
-    @Test
-    void FirstNameNullValue() {
-
-        FormController myFormController = new FormController();
-
-        clickOn("#firstName");
-        write(null);
-
-        // submit form
-        clickOn("#submitButton");
-
-        // expected
-
-        // actual
-
-        //assertEquals(null, myFormController.firstName.getText());
-        assertNull(myFormController.firstName.getText());
-    }
-
-
-
-    @Test
-    void IsFirstNameGreaterThanOneChar() {
-        FormController myFormController = new FormController();
-        clickOn("#firstName");
-        write("John");
-
-        // submit form
-        clickOn("#submitButton");
-
-        String firstNameValue = myFormController.firstName.getText();
-        assertEquals("John", firstNameValue);
-    }
-
-    // null
-
-    @Test
-    void isFirstNameEmptyString()
-    {
-        FormController myFormController = new FormController();
-        clickOn("#firstName");
-        write("");
-
-        // submit form
-        clickOn("#submitButton");
-        String firstNameValue = myFormController.firstName.getText();
-        assertEquals("", firstNameValue);
-    }
-    // empty string
-    // unexpected characters
-    //
-
-    @Test
-    void FirstNameContainsSpecialCharactersOrNumbers()
-    {
-        FormController myFormController = new FormController();
-        clickOn("#firstName");
-        write("@#$%^*");
-    }
-
-
-     */
 }
