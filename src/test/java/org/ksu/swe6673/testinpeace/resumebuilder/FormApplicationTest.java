@@ -33,26 +33,6 @@ class FormApplicationTest {
     }
 
     @Test
-    void getHostServices() {
-    }
-
-    @Test
-    void getParameters() {
-    }
-
-    @Test
-    void notifyPreloader() {
-    }
-
-    @Test
-    void getUserAgentStylesheet() {
-    }
-
-    @Test
-    void setUserAgentStylesheet() {
-    }
-
-    @Test
     void start() {
     }
 

@@ -202,15 +202,6 @@ class FormControllerTest extends ApplicationTest {
 
     @ParameterizedTest
     @MethodSource("malformedStrings")
-    @DisplayName("Test contactInfo onSubmitButtonClick with malformed inputs")
-    void contactInfoTestOnSubmitButtonClickWithMalformedInputs(String input) {
-        formController.contactInfo.setText(input);
-        formController.onSubmitButtonClick();
-        assertEquals(input, formController.contactInfo.getText());
-    }
-
-    @ParameterizedTest
-    @MethodSource("malformedStrings")
     @DisplayName("Test email onSubmitButtonClick with malformed inputs")
     void emailTestOnSubmitButtonClickWithMalformedInputs(String input) {
         formController.email.setText(input);
@@ -362,7 +353,6 @@ class FormControllerTest extends ApplicationTest {
         formController.addressUnit.setText("Apt. 123");
         formController.addressCity.setText("City");
         formController.addressZip.setText("12345");
-        formController.contactInfo.setText("John Doe");
         formController.email.setText("abc@google.com");
         formController.linkedin.setText("linkedin.com/in/johndoe");
         formController.github.setText("github.com/johndoe");
@@ -382,5 +372,7 @@ class FormControllerTest extends ApplicationTest {
         formController.onSubmitButtonClick();
 
         Document pdf = formController.exportPdf();
+        assertNotNull(pdf);
+        assertNotNull(pdf.getAccessibleAttributes());
     }
 }

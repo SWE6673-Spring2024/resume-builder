@@ -22,8 +22,6 @@ public class FormController {
     @FXML
     TextField addressZip;
     @FXML
-    TextField contactInfo;
-    @FXML
     TextField email;
     @FXML
     TextField linkedin;

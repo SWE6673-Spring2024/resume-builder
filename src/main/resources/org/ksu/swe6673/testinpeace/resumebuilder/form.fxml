@@ -23,8 +23,6 @@
     <TextField fx:id="addressCity" promptText="City" />
     <TextField fx:id="addressZip" promptText="Zip Code" />
 
-    <TextField fx:id="contactInfo" promptText="Contact Info" />
-
     <TextField fx:id="email" promptText="Email" />
     <TextField fx:id="linkedin" promptText="LinkedIn" />
     <TextField fx:id="github" promptText="GitHub" />
