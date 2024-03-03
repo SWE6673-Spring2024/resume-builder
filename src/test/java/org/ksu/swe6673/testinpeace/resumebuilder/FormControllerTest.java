@@ -1,6 +1,5 @@
 package org.ksu.swe6673.testinpeace.resumebuilder;
 
-import com.sun.javafx.charts.Legend;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -14,11 +13,13 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
+import org.testfx.framework.junit5.ApplicationTest;
 
-import java.awt.*;
 
 import static org.junit.jupiter.api.Assertions.*;
-class FormControllerTest {
+class FormControllerTest extends ApplicationTest {
 
     private FormController formController;
 
@@ -31,71 +32,36 @@ class FormControllerTest {
     void tearDown() {
     }
 
-    /*
     @Test
-    @DisplayName("firstName text field is not null")
-    void firstNameShouldNotBeNullWhenInitialized() {
+    @DisplayName("Initialize FormController")
+    void initializeFormController() {
+        assertNotNull(formController);
         assertNotNull(formController.firstName);
-    }
-
-    @Test
-    @DisplayName("lastName text field is not null")
-    void lastNameShouldNotBeNullWhenInitialized() {
         assertNotNull(formController.lastName);
-    }
-
-    @Test
-    @DisplayName("address text field is not null")
-    void addressShouldNotBeNullWhenInitialized() {
-        assertNotNull(formController.address);
-    }
-
-    @Test
-    @DisplayName("contactInfo text field is not null")
-    void contactInfoShouldNotBeNullWhenInitialized() {
+        assertNotNull(formController.addressStreet);
+        assertNotNull(formController.addressUnit);
+        assertNotNull(formController.addressCity);
+        assertNotNull(formController.addressZip);
         assertNotNull(formController.contactInfo);
-    }
-
-    @Test
-    @DisplayName("email text field is not null")
-    void emailShouldNotBeNullWhenInitialized() {
         assertNotNull(formController.email);
-    }
-
-    @Test
-    @DisplayName("linkedin text field is not null")
-    void linkedinShouldNotBeNullWhenInitialized() {
         assertNotNull(formController.linkedin);
-    }
-
-    @Test
-    @DisplayName("github text field is not null")
-    void githubShouldNotBeNullWhenInitialized() {
         assertNotNull(formController.github);
-    }
-
-    @Test
-    @DisplayName("phone text field is not null")
-    void phoneShouldNotBeNullWhenInitialized() {
         assertNotNull(formController.phone);
-    }
-
-    @Test
-    @DisplayName("workHistory text field is not null")
-    void workHistoryShouldNotBeNullWhenInitialized() {
         assertNotNull(formController.workHistory);
-    }
-
-    @Test
-    @DisplayName("workYears text field is not null")
-    void workYearsShouldNotBeNullWhenInitialized() {
         assertNotNull(formController.workYears);
+        assertNotNull(formController.company);
+        assertNotNull(formController.role);
+        assertNotNull(formController.description);
+        assertNotNull(formController.education);
+        assertNotNull(formController.schoolYears);
+        assertNotNull(formController.degree);
+        assertNotNull(formController.school);
+        assertNotNull(formController.major);
+        assertNotNull(formController.gpa);
+        assertNotNull(formController.status);
+        assertNotNull(formController.submitLabel);
+        assertNotNull(formController.submitButton);
     }
-
-    @Test
-    void onSubmitButtonClick() {
-    }
-
 
     //firstName
     @ParameterizedTest
