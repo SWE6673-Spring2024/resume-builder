@@ -1,5 +1,6 @@
 package org.ksu.swe6673.testinpeace.resumebuilder;
 
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -17,23 +18,37 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.junit.jupiter.params.provider.ValueSource;
+import org.testfx.api.FxToolkit;
 import org.testfx.framework.junit5.ApplicationTest;
 
+import java.io.IOException;
+import java.util.concurrent.TimeoutException;
 import java.util.regex.Pattern;
 import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.*;
-class FormControllerTest extends ApplicationTest {
+class FormUnitTests extends ApplicationTest {
 
     private FormController formController;
+    private FXMLLoader loader;
+
+    @Override
+    public void start(Stage stage) throws IOException {
+        this.loader = new FXMLLoader(getClass().getResource("form.fxml"));
+        Parent root = this.loader.load();
+        stage.setScene(new Scene(root));
+        stage.show();
+        stage.toFront();
+    }
 
     @BeforeEach
     void setUp() {
-        this.formController = new FormController();
+        this.formController = this.loader.getController();
     }
 
     @AfterEach
-    void tearDown() {
+    void tearDown() throws TimeoutException {
+        FxToolkit.hideStage();
     }
 
     @Test
@@ -64,25 +79,27 @@ class FormControllerTest extends ApplicationTest {
         assertNotNull(formController.status);
         assertNotNull(formController.submitLabel);
         assertNotNull(formController.submitButton);
+        assertNotNull(formController.resetButton);
     }
 
     private static Stream<Arguments> phoneNumberIsProperlyFormatted() {
         // Valid inputs will return true, invalid inputs will return false
         return Stream.of(
                 Arguments.of("1234567890", true),
+                Arguments.of("123456789012", true),
                 Arguments.of("123-456-7890", true),
                 Arguments.of("123.456.7890", true),
                 Arguments.of("123 456 7890", true),
                 Arguments.of("(123) 456 7890", true),
                 Arguments.of("(123)-456-7890", true),
-                Arguments.of("+1 (800)-456-7890", true),
+                Arguments.of("+1 (123)-456-7890", false),
+                Arguments.of("+123456789012", true),
                 Arguments.of("123-456-7890 ext 1234", false),
                 Arguments.of("123-456-7890 x1234", false),
-                Arguments.of("abc-def-hijk", false),
+                Arguments.of("123-DEFHIJK", false),
                 Arguments.of("12345678", false),
-                Arguments.of("12345678901", false),
                 Arguments.of("1-1-1", false),
-                Arguments.of("+982", false),
+                Arguments.of("+123", false),
                 Arguments.of("456-7890", false),
                 Arguments.of("(1) 456 7890", false)
         );
@@ -142,199 +159,199 @@ class FormControllerTest extends ApplicationTest {
 
     @ParameterizedTest
     @MethodSource("malformedStrings")
-    @DisplayName("Test firstName onSubmitButtonClick with malformed inputs")
-    void firstNameTestOnSubmitButtonClickWithMalformedInputs(String input) {
+    @DisplayName("Test firstName submit with malformed inputs")
+    void firstNameTestSubmitWithMalformedInputs(String input) {
         formController.firstName.setText(input);
-        formController.onSubmitButtonClick();
+        Platform.runLater(() -> formController.submit());
         assertEquals(input, formController.firstName.getText());
     }
 
     @ParameterizedTest
     @MethodSource("malformedStrings")
-    @DisplayName("Test lastName onSubmitButtonClick with malformed inputs")
-    void lastNameTestOnSubmitButtonClickWithMalformedInputs(String input) {
+    @DisplayName("Test lastName submit with malformed inputs")
+    void lastNameTestSubmitWithMalformedInputs(String input) {
         formController.lastName.setText(input);
-        formController.onSubmitButtonClick();
+        Platform.runLater(() -> formController.submit());
         assertEquals(input, formController.lastName.getText());
     }
 
     @ParameterizedTest
     @MethodSource("malformedStrings")
-    @DisplayName("Test addressStreet onSubmitButtonClick with malformed inputs")
-    void addressTestOnSubmitButtonClickWithMalformedInputs(String input) {
+    @DisplayName("Test addressStreet submit with malformed inputs")
+    void addressStreetTestSubmitWithMalformedInputs(String input) {
         formController.addressStreet.setText(input);
-        formController.onSubmitButtonClick();
+        Platform.runLater(() -> formController.submit());
         assertEquals(input, formController.addressStreet.getText());
     }
 
     @ParameterizedTest
     @MethodSource("malformedStrings")
-    @DisplayName("Test addressUnit onSubmitButtonClick with malformed inputs")
-    void addressUnitTestOnSubmitButtonClickWithMalformedInputs(String input) {
+    @DisplayName("Test addressUnit submit with malformed inputs")
+    void addressUnitTestSubmitWithMalformedInputs(String input) {
         formController.addressUnit.setText(input);
-        formController.onSubmitButtonClick();
+        Platform.runLater(() -> formController.submit());
         assertEquals(input, formController.addressUnit.getText());
     }
 
     @ParameterizedTest
     @MethodSource("malformedStrings")
-    @DisplayName("Test addressCity onSubmitButtonClick with malformed inputs")
-    void addressCityTestOnSubmitButtonClickWithMalformedInputs(String input) {
+    @DisplayName("Test addressCity submit with malformed inputs")
+    void addressCityTestSubmitWithMalformedInputs(String input) {
         formController.addressCity.setText(input);
-        formController.onSubmitButtonClick();
+        Platform.runLater(() -> formController.submit());
         assertEquals(input, formController.addressCity.getText());
     }
 
     @ParameterizedTest
     @MethodSource("malformedStrings")
-    @DisplayName("Test addressZip onSubmitButtonClick with malformed inputs")
-    void addressZipTestOnSubmitButtonClickWithMalformedInputs(String input) {
+    @DisplayName("Test addressZip submit with malformed inputs")
+    void addressZipTestSubmitWithMalformedInputs(String input) {
         formController.addressZip.setText(input);
-        formController.onSubmitButtonClick();
+        Platform.runLater(() -> formController.submit());
         assertEquals(input, formController.addressZip.getText());
     }
 
     @ParameterizedTest
     @MethodSource("malformedStrings")
-    @DisplayName("Test email onSubmitButtonClick with malformed inputs")
-    void emailTestOnSubmitButtonClickWithMalformedInputs(String input) {
+    @DisplayName("Test email submit with malformed inputs")
+    void emailTestSubmitWithMalformedInputs(String input) {
         formController.email.setText(input);
-        formController.onSubmitButtonClick();
+        Platform.runLater(() -> formController.submit());
         assertEquals(input, formController.email.getText());
     }
 
     @ParameterizedTest
     @MethodSource("malformedStrings")
-    @DisplayName("Test linkedin onSubmitButtonClick with malformed inputs")
-    void linkedinTestOnSubmitButtonClickWithMalformedInputs(String input) {
+    @DisplayName("Test linkedin submit with malformed inputs")
+    void linkedinTestSubmitWithMalformedInputs(String input) {
         formController.linkedin.setText(input);
-        formController.onSubmitButtonClick();
+        Platform.runLater(() -> formController.submit());
         assertEquals(input, formController.linkedin.getText());
     }
 
     @ParameterizedTest
     @MethodSource("malformedStrings")
-    @DisplayName("Test github onSubmitButtonClick with malformed inputs")
-    void githubTestOnSubmitButtonClickWithMalformedInputs(String input) {
+    @DisplayName("Test github submit with malformed inputs")
+    void githubTestSubmitWithMalformedInputs(String input) {
         formController.github.setText(input);
-        formController.onSubmitButtonClick();
+        Platform.runLater(() -> formController.submit());
         assertEquals(input, formController.github.getText());
     }
 
     @ParameterizedTest
     @MethodSource("malformedStrings")
-    @DisplayName("Test phone onSubmitButtonClick with malformed inputs")
-    void phoneTestOnSubmitButtonClickWithMalformedInputs(String input) {
+    @DisplayName("Test phone submit with malformed inputs")
+    void phoneTestSubmitWithMalformedInputs(String input) {
         formController.phone.setText(input);
-        formController.onSubmitButtonClick();
+        Platform.runLater(() -> formController.submit());
         assertEquals(input, formController.phone.getText());
     }
 
     @ParameterizedTest
     @MethodSource("malformedStrings")
-    @DisplayName("Test workHistory onSubmitButtonClick with malformed inputs")
-    void workHistoryTestOnSubmitButtonClickWithMalformedInputs(String input) {
+    @DisplayName("Test workHistory submit with malformed inputs")
+    void workHistoryTestSubmitWithMalformedInputs(String input) {
         formController.workHistory.setText(input);
-        formController.onSubmitButtonClick();
+        Platform.runLater(() -> formController.submit());
         assertEquals(input, formController.workHistory.getText());
     }
 
     @ParameterizedTest
     @MethodSource("malformedStrings")
-    @DisplayName("Test workYears onSubmitButtonClick with malformed inputs")
-    void workYearsTestOnSubmitButtonClickWithMalformedInputs(String input) {
+    @DisplayName("Test workYears submit with malformed inputs")
+    void workYearsTestSubmitWithMalformedInputs(String input) {
         formController.workYears.setText(input);
-        formController.onSubmitButtonClick();
+        Platform.runLater(() -> formController.submit());
         assertEquals(input, formController.workYears.getText());
     }
 
     @ParameterizedTest
     @MethodSource("malformedStrings")
-    @DisplayName("Test company onSubmitButtonClick with malformed inputs")
-    void companyTestOnSubmitButtonClickWithMalformedInputs(String input) {
+    @DisplayName("Test company submit with malformed inputs")
+    void companyTestSubmitWithMalformedInputs(String input) {
         formController.company.setText(input);
-        formController.onSubmitButtonClick();
+        Platform.runLater(() -> formController.submit());
         assertEquals(input, formController.company.getText());
     }
 
     @ParameterizedTest
     @MethodSource("malformedStrings")
-    @DisplayName("Test role onSubmitButtonClick with malformed inputs")
-    void roleTestOnSubmitButtonClickWithMalformedInputs(String input) {
+    @DisplayName("Test role submit with malformed inputs")
+    void roleTestSubmitWithMalformedInputs(String input) {
         formController.role.setText(input);
-        formController.onSubmitButtonClick();
+        Platform.runLater(() -> formController.submit());
         assertEquals(input, formController.role.getText());
     }
 
     @ParameterizedTest
     @MethodSource("malformedStrings")
-    @DisplayName("Test description onSubmitButtonClick with malformed inputs")
-    void descriptionTestOnSubmitButtonClickWithMalformedInputs(String input) {
+    @DisplayName("Test description submit with malformed inputs")
+    void descriptionTestSubmitWithMalformedInputs(String input) {
         formController.description.setText(input);
-        formController.onSubmitButtonClick();
+        Platform.runLater(() -> formController.submit());
         assertEquals(input, formController.description.getText());
     }
 
     @ParameterizedTest
     @MethodSource("malformedStrings")
-    @DisplayName("Test education onSubmitButtonClick with malformed inputs")
-    void educationTestOnSubmitButtonClickWithMalformedInputs(String input) {
+    @DisplayName("Test education submit with malformed inputs")
+    void educationTestSubmitWithMalformedInputs(String input) {
         formController.education.setText(input);
-        formController.onSubmitButtonClick();
+        Platform.runLater(() -> formController.submit());
         assertEquals(input, formController.education.getText());
     }
 
     @ParameterizedTest
     @MethodSource("malformedStrings")
-    @DisplayName("Test schoolYears onSubmitButtonClick with malformed inputs")
-    void schoolYearsTestOnSubmitButtonClickWithMalformedInputs(String input) {
+    @DisplayName("Test schoolYears submit with malformed inputs")
+    void schoolYearsTestSubmitWithMalformedInputs(String input) {
         formController.schoolYears.setText(input);
-        formController.onSubmitButtonClick();
+        Platform.runLater(() -> formController.submit());
         assertEquals(input, formController.schoolYears.getText());
     }
 
     @ParameterizedTest
     @MethodSource("malformedStrings")
-    @DisplayName("Test degree onSubmitButtonClick with malformed inputs")
-    void degreeTestOnSubmitButtonClickWithMalformedInputs(String input) {
+    @DisplayName("Test degree submit with malformed inputs")
+    void degreeTestSubmitWithMalformedInputs(String input) {
         formController.degree.setText(input);
-        formController.onSubmitButtonClick();
+        Platform.runLater(() -> formController.submit());
         assertEquals(input, formController.degree.getText());
     }
 
     @ParameterizedTest
     @MethodSource("malformedStrings")
-    @DisplayName("Test school onSubmitButtonClick with malformed inputs")
-    void schoolTestOnSubmitButtonClickWithMalformedInputs(String input) {
+    @DisplayName("Test school submit with malformed inputs")
+    void schoolTestSubmitWithMalformedInputs(String input) {
         formController.school.setText(input);
-        formController.onSubmitButtonClick();
+        Platform.runLater(() -> formController.submit());
         assertEquals(input, formController.school.getText());
     }
 
     @ParameterizedTest
     @MethodSource("malformedStrings")
-    @DisplayName("Test major onSubmitButtonClick with malformed inputs")
-    void majorTestOnSubmitButtonClickWithMalformedInputs(String input) {
+    @DisplayName("Test major submit with malformed inputs")
+    void majorTestSubmitWithMalformedInputs(String input) {
         formController.major.setText(input);
-        formController.onSubmitButtonClick();
+        Platform.runLater(() -> formController.submit());
         assertEquals(input, formController.major.getText());
     }
 
     @ParameterizedTest
     @MethodSource("malformedStrings")
-    @DisplayName("Test gpa onSubmitButtonClick with malformed inputs")
-    void gpaTestOnSubmitButtonClickWithMalformedInputs(String input) {
+    @DisplayName("Test gpa submit with malformed inputs")
+    void gpaTestSubmitWithMalformedInputs(String input) {
         formController.gpa.setText(input);
-        formController.onSubmitButtonClick();
+        Platform.runLater(() -> formController.submit());
         assertEquals(input, formController.gpa.getText());
     }
 
     @ParameterizedTest
     @MethodSource("malformedStrings")
-    @DisplayName("Test status onSubmitButtonClick with malformed inputs")
-    void statusTestOnSubmitButtonClickWithMalformedInputs(String input) {
+    @DisplayName("Test status submit with malformed inputs")
+    void statusTestSubmitWithMalformedInputs(String input) {
         formController.status.setText(input);
-        formController.onSubmitButtonClick();
+        Platform.runLater(() -> formController.submit());
         assertEquals(input, formController.status.getText());
     }
 
@@ -363,7 +380,7 @@ class FormControllerTest extends ApplicationTest {
         formController.major.setText("Computer Science");
         formController.gpa.setText("3.5");
         formController.status.setText("Graduated");
-        formController.onSubmitButtonClick();
+        Platform.runLater(() -> formController.submit());
 
         PDDocument pdf = formController.exportPdf();
         assertNotNull(pdf);

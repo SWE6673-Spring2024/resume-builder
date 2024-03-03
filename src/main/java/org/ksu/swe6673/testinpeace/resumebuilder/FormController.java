@@ -56,17 +56,37 @@ public class FormController {
 
     @FXML
     Label submitLabel;
-
     @FXML
     Button submitButton;
+    @FXML
+    Button resetButton;
 
     @FXML
     protected void onSubmitButtonClick() {
+        submit();
+        exportPdf();
+    }
+
+    @FXML
+    protected void onResetButtonClick() {
+        reset();
+    }
+
+    public void submit() {
+        // TODO: save updated form values to inject into PDF
         submitLabel.setText("Submitted");
     }
 
+    public void reset() {
+        // TODO: clear form values
+    }
+
     public PDDocument exportPdf() {
+        // TODO: create PDF with form values
         return new PDDocument();
     }
+
+
+
 
 }

@@ -53,5 +53,8 @@
     </HBox>
 
     <Label fx:id="submitLabel" text="Not Submitted"/>
-    <Button fx:id="submitButton" text="Submit" onAction="#onSubmitButtonClick"/>
+    <HBox>
+        <Button fx:id="submitButton" text="Submit" onAction="#onSubmitButtonClick"/>
+        <Button fx:id="resetButton" text="Reset" onAction="#onResetButtonClick"/>
+    </HBox>
 </VBox>
