@@ -26,7 +26,7 @@ jobs:
         uses: actions/setup-java@v4
         with:
           java-version: ${{ env.JAVA_VERSION }}
-          distribution: fx-librca
+          distribution: corretto
           cache: maven
 
       - name: Install
