@@ -14,9 +14,16 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.ArgumentsSource;
+import org.junit.jupiter.params.provider.MethodSource;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.testfx.framework.junit5.ApplicationTest;
 
+import com.itextpdf.text.Document;
+
+import java.util.regex.Pattern;
+import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.*;
 class FormControllerTest extends ApplicationTest {
@@ -63,572 +70,317 @@ class FormControllerTest extends ApplicationTest {
         assertNotNull(formController.submitButton);
     }
 
-    //firstName
+    private static Stream<Arguments> phoneNumberIsProperlyFormatted() {
+        // Valid inputs will return true, invalid inputs will return false
+        return Stream.of(
+                Arguments.of("1234567890", true),
+                Arguments.of("123-456-7890", true),
+                Arguments.of("123.456.7890", true),
+                Arguments.of("123 456 7890", true),
+                Arguments.of("(123) 456 7890", true),
+                Arguments.of("(123)-456-7890", true),
+                Arguments.of("+1 (800)-456-7890", true),
+                Arguments.of("123-456-7890 ext 1234", false),
+                Arguments.of("123-456-7890 x1234", false),
+                Arguments.of("abc-def-hijk", false),
+                Arguments.of("12345678", false),
+                Arguments.of("12345678901", false),
+                Arguments.of("1-1-1", false),
+                Arguments.of("+982", false),
+                Arguments.of("456-7890", false),
+                Arguments.of("(1) 456 7890", false)
+        );
+    }
     @ParameterizedTest
-    @ValueSource(strings = {
-//            null, // null string
-            "", // empty string
-            " ", // whitespace string
-            "\t\n\r", // control characters string
-            "a" + "\0" + "b", // string with null character
-            "This is a very long string that exceeds the maximum length allowed for the field", // string that is too long
-            "This string contains some invalid characters such as @#$%^&*()", // string with non-alphanumeric characters
-            "This string has a mismatched quote'", // string with unbalanced quotes
-            "This string has an escape sequence \\", // string with incomplete escape sequence
-            "This string has a non-ASCII character é", // string with non-ASCII character
-    })
+    @MethodSource("phoneNumberIsProperlyFormatted")
+    void phoneNumberIsProperlyFormatted(String number, boolean valid) {
+        formController.phone.setText(number);
+        String actual = formController.phone.getText();
+        // refer to: https://ihateregex.io/expr/phone/
+        String pattern = "^[\\+]?[(]?[0-9]{3}[)]?[-\\s\\.]?[0-9]{3}[-\\s\\.]?[0-9]{4,6}$";
+        if (valid) {
+            assertTrue(actual.matches(pattern));
+        } else {
+            assertFalse(actual.matches(pattern));
+        }
+    }
+    
+
+    private static Stream<Arguments> emailIsProperlyFormatted() {
+        // Valid inputs will return true, invalid inputs will return false
+        return Stream.of(
+                Arguments.of("john@google.com", true),
+                Arguments.of("john@google.org", true),
+                Arguments.of("john@google", false),
+                Arguments.of("john@.com", false),
+                Arguments.of("@google.com", false)
+        );
+    }
+    @ParameterizedTest
+    @MethodSource("emailIsProperlyFormatted")
+    void emailIsProperlyFormatted(String email, boolean valid) {
+        formController.email.setText(email);
+        String actual = formController.email.getText();
+        // refer to: https://ihateregex.io/expr/email/
+        String pattern = "^[^@ \\t\\r\\n]+@[^@ \\t\\r\\n]+\\.[^@ \\t\\r\\n]+";
+        if (valid) {
+            assertTrue(actual.matches(pattern));
+        } else {
+            assertFalse(actual.matches(pattern));
+        }
+    }
+
+
+    private static Stream<String> malformedStrings() {
+        return Stream.of(
+                null, // null string
+                "", // empty string
+                " ", // whitespace string
+                "\t\n\r", // control characters string
+                "a" + "\0" + "b", // string with null character
+                "This is a very long string that exceeds the maximum length allowed for the field", // string that is too long
+                "This string contains some invalid characters such as @#$%^&*()", // string with non-alphanumeric characters
+                "This string has a mismatched quote'", // string with unbalanced quotes
+                "This string has an escape sequence \\", // string with incomplete escape sequence
+                "This string has a non-ASCII character é" // string with non-ASCII character
+        );
+    }
+
+    @ParameterizedTest
+    @MethodSource("malformedStrings")
+    @DisplayName("Test firstName onSubmitButtonClick with malformed inputs")
     void firstNameTestOnSubmitButtonClickWithMalformedInputs(String input) {
-        FormController myFormController = new FormController();
-
-        clickOn("#firstName");
-        write(input);
-
-        clickOn("#submitButton");
-        assertEquals(input, myFormController.firstName.getText());
+        formController.firstName.setText(input);
+        formController.onSubmitButtonClick();
+        assertEquals(input, formController.firstName.getText());
     }
 
-    //lastName
     @ParameterizedTest
-    @ValueSource(strings = {
-            // null, // null string
-            "", // empty string
-            " ", // whitespace string
-            "\t\n\r", // control characters string
-            "a" + "\0" + "b", // string with null character
-            "This is a very long string that exceeds the maximum length allowed for the field", // string that is too long
-            "This string contains some invalid characters such as @#$%^&*()", // string with non-alphanumeric characters
-            "This string has a mismatched quote'", // string with unbalanced quotes
-            "This string has an escape sequence \\", // string with incomplete escape sequence
-            "This string has a non-ASCII character é", // string with non-ASCII character
-    })
+    @MethodSource("malformedStrings")
+    @DisplayName("Test lastName onSubmitButtonClick with malformed inputs")
     void lastNameTestOnSubmitButtonClickWithMalformedInputs(String input) {
-        FormController myFormController = new FormController();
-
-        clickOn("#lastName");
-        write(input);
-
-        clickOn("#submitButton");
-        assertEquals(input, myFormController.lastName.getText());
+        formController.lastName.setText(input);
+        formController.onSubmitButtonClick();
+        assertEquals(input, formController.lastName.getText());
     }
 
-
-    //address
     @ParameterizedTest
-    @ValueSource(strings = {
-            // null, // null string
-            "", // empty string
-            " ", // whitespace string
-            "\t\n\r", // control characters string
-            "a" + "\0" + "b", // string with null character
-            "This is a very long string that exceeds the maximum length allowed for the field", // string that is too long
-            "This string contains some invalid characters such as @#$%^&*()", // string with non-alphanumeric characters
-            "This string has a mismatched quote'", // string with unbalanced quotes
-            "This string has an escape sequence \\", // string with incomplete escape sequence
-            "This string has a non-ASCII character é", // string with non-ASCII character
-    })
+    @MethodSource("malformedStrings")
+    @DisplayName("Test addressStreet onSubmitButtonClick with malformed inputs")
     void addressTestOnSubmitButtonClickWithMalformedInputs(String input) {
-        FormController myFormController = new FormController();
-
-        clickOn("#address");
-        write(input);
-
-        clickOn("#submitButton");
-        assertEquals(input, myFormController.address.getText());
+        formController.addressStreet.setText(input);
+        formController.onSubmitButtonClick();
+        assertEquals(input, formController.addressStreet.getText());
     }
 
-
-    //contact info
     @ParameterizedTest
-    @ValueSource(strings = {
-            // null, // null string
-            "", // empty string
-            " ", // whitespace string
-            "\t\n\r", // control characters string
-            "a" + "\0" + "b", // string with null character
-            "This is a very long string that exceeds the maximum length allowed for the field", // string that is too long
-            "This string contains some invalid characters such as @#$%^&*()", // string with non-alphanumeric characters
-            "This string has a mismatched quote'", // string with unbalanced quotes
-            "This string has an escape sequence \\", // string with incomplete escape sequence
-            "This string has a non-ASCII character é", // string with non-ASCII character
-    })
+    @MethodSource("malformedStrings")
+    @DisplayName("Test addressUnit onSubmitButtonClick with malformed inputs")
+    void addressUnitTestOnSubmitButtonClickWithMalformedInputs(String input) {
+        formController.addressUnit.setText(input);
+        formController.onSubmitButtonClick();
+        assertEquals(input, formController.addressUnit.getText());
+    }
+
+    @ParameterizedTest
+    @MethodSource("malformedStrings")
+    @DisplayName("Test addressCity onSubmitButtonClick with malformed inputs")
+    void addressCityTestOnSubmitButtonClickWithMalformedInputs(String input) {
+        formController.addressCity.setText(input);
+        formController.onSubmitButtonClick();
+        assertEquals(input, formController.addressCity.getText());
+    }
+
+    @ParameterizedTest
+    @MethodSource("malformedStrings")
+    @DisplayName("Test addressZip onSubmitButtonClick with malformed inputs")
+    void addressZipTestOnSubmitButtonClickWithMalformedInputs(String input) {
+        formController.addressZip.setText(input);
+        formController.onSubmitButtonClick();
+        assertEquals(input, formController.addressZip.getText());
+    }
+
+    @ParameterizedTest
+    @MethodSource("malformedStrings")
+    @DisplayName("Test contactInfo onSubmitButtonClick with malformed inputs")
     void contactInfoTestOnSubmitButtonClickWithMalformedInputs(String input) {
-        FormController myFormController = new FormController();
-
-        clickOn("#contactInfo");
-        write(input);
-
-        clickOn("#submitButton");
-        assertEquals(input, myFormController.contactInfo.getText());
+        formController.contactInfo.setText(input);
+        formController.onSubmitButtonClick();
+        assertEquals(input, formController.contactInfo.getText());
     }
 
-    //email
     @ParameterizedTest
-    @ValueSource(strings = {
-            // null, // null string
-            "", // empty string
-            " ", // whitespace string
-            "\t\n\r", // control characters string
-            "a" + "\0" + "b", // string with null character
-            "This is a very long string that exceeds the maximum length allowed for the field", // string that is too long
-            "This string contains some invalid characters such as @#$%^&*()", // string with non-alphanumeric characters
-            "This string has a mismatched quote'", // string with unbalanced quotes
-            "This string has an escape sequence \\", // string with incomplete escape sequence
-            "This string has a non-ASCII character é", // string with non-ASCII character
-    })
+    @MethodSource("malformedStrings")
+    @DisplayName("Test email onSubmitButtonClick with malformed inputs")
     void emailTestOnSubmitButtonClickWithMalformedInputs(String input) {
-        FormController myFormController = new FormController();
-
-        clickOn("#email");
-        write(input);
-
-        clickOn("#submitButton");
-        assertEquals(input, myFormController.email.getText());
+        formController.email.setText(input);
+        formController.onSubmitButtonClick();
+        assertEquals(input, formController.email.getText());
     }
 
-    //linkedIn
     @ParameterizedTest
-    @ValueSource(strings = {
-            // null, // null string
-            "", // empty string
-            " ", // whitespace string
-            "\t\n\r", // control characters string
-            "a" + "\0" + "b", // string with null character
-            "This is a very long string that exceeds the maximum length allowed for the field", // string that is too long
-            "This string contains some invalid characters such as @#$%^&*()", // string with non-alphanumeric characters
-            "This string has a mismatched quote'", // string with unbalanced quotes
-            "This string has an escape sequence \\", // string with incomplete escape sequence
-            "This string has a non-ASCII character é", // string with non-ASCII character
-    })
-    void linkedInTestOnSubmitButtonClickWithMalformedInputs(String input) {
-        FormController myFormController = new FormController();
-
-        clickOn("#linkedin");
-        write(input);
-
-        clickOn("#submitButton");
-        assertEquals(input, myFormController.linkedin.getText());
+    @MethodSource("malformedStrings")
+    @DisplayName("Test linkedin onSubmitButtonClick with malformed inputs")
+    void linkedinTestOnSubmitButtonClickWithMalformedInputs(String input) {
+        formController.linkedin.setText(input);
+        formController.onSubmitButtonClick();
+        assertEquals(input, formController.linkedin.getText());
     }
 
-
-    //github
     @ParameterizedTest
-    @ValueSource(strings = {
-//            null, // null string
-            "", // empty string
-            " ", // whitespace string
-            "\t\n\r", // control characters string
-            "a" + "\0" + "b", // string with null character
-            "This is a very long string that exceeds the maximum length allowed for the field", // string that is too long
-            "This string contains some invalid characters such as @#$%^&*()", // string with non-alphanumeric characters
-            "This string has a mismatched quote'", // string with unbalanced quotes
-            "This string has an escape sequence \\", // string with incomplete escape sequence
-            "This string has a non-ASCII character é", // string with non-ASCII character
-    })
+    @MethodSource("malformedStrings")
+    @DisplayName("Test github onSubmitButtonClick with malformed inputs")
     void githubTestOnSubmitButtonClickWithMalformedInputs(String input) {
-        FormController myFormController = new FormController();
-
-        clickOn("#github");
-        write(input);
-
-        clickOn("#submitButton");
-        assertEquals(input, myFormController.github.getText());
+        formController.github.setText(input);
+        formController.onSubmitButtonClick();
+        assertEquals(input, formController.github.getText());
     }
 
-
-    //phone
     @ParameterizedTest
-    @ValueSource(strings = {
-//            null, // null string
-            "", // empty string
-            " ", // whitespace string
-            "\t\n\r", // control characters string
-            "a" + "\0" + "b", // string with null character
-            "This is a very long string that exceeds the maximum length allowed for the field", // string that is too long
-            "This string contains some invalid characters such as @#$%^&*()", // string with non-alphanumeric characters
-            "This string has a mismatched quote'", // string with unbalanced quotes
-            "This string has an escape sequence \\", // string with incomplete escape sequence
-            "This string has a non-ASCII character é", // string with non-ASCII character
-    })
+    @MethodSource("malformedStrings")
+    @DisplayName("Test phone onSubmitButtonClick with malformed inputs")
     void phoneTestOnSubmitButtonClickWithMalformedInputs(String input) {
-        FormController myFormController = new FormController();
-
-        clickOn("#phone");
-        write(input);
-
-        clickOn("#submitButton");
-        assertEquals(input, myFormController.phone.getText());
+        formController.phone.setText(input);
+        formController.onSubmitButtonClick();
+        assertEquals(input, formController.phone.getText());
     }
 
-
-    //workHistory
     @ParameterizedTest
-    @ValueSource(strings = {
-//            null, // null string
-            "", // empty string
-            " ", // whitespace string
-            "\t\n\r", // control characters string
-            "a" + "\0" + "b", // string with null character
-            "This is a very long string that exceeds the maximum length allowed for the field", // string that is too long
-            "This string contains some invalid characters such as @#$%^&*()", // string with non-alphanumeric characters
-            "This string has a mismatched quote'", // string with unbalanced quotes
-            "This string has an escape sequence \\", // string with incomplete escape sequence
-            "This string has a non-ASCII character é", // string with non-ASCII character
-    })
+    @MethodSource("malformedStrings")
+    @DisplayName("Test workHistory onSubmitButtonClick with malformed inputs")
     void workHistoryTestOnSubmitButtonClickWithMalformedInputs(String input) {
-        FormController myFormController = new FormController();
-
-        clickOn("#workHistory");
-        write(input);
-
-        clickOn("#submitButton");
-        assertEquals(input, myFormController.workHistory.getText());
+        formController.workHistory.setText(input);
+        formController.onSubmitButtonClick();
+        assertEquals(input, formController.workHistory.getText());
     }
 
-
-    //company
     @ParameterizedTest
-    @ValueSource(strings = {
-//            null, // null string
-            "", // empty string
-            " ", // whitespace string
-            "\t\n\r", // control characters string
-            "a" + "\0" + "b", // string with null character
-            "This is a very long string that exceeds the maximum length allowed for the field", // string that is too long
-            "This string contains some invalid characters such as @#$%^&*()", // string with non-alphanumeric characters
-            "This string has a mismatched quote'", // string with unbalanced quotes
-            "This string has an escape sequence \\", // string with incomplete escape sequence
-            "This string has a non-ASCII character é", // string with non-ASCII character
-    })
+    @MethodSource("malformedStrings")
+    @DisplayName("Test workYears onSubmitButtonClick with malformed inputs")
+    void workYearsTestOnSubmitButtonClickWithMalformedInputs(String input) {
+        formController.workYears.setText(input);
+        formController.onSubmitButtonClick();
+        assertEquals(input, formController.workYears.getText());
+    }
+
+    @ParameterizedTest
+    @MethodSource("malformedStrings")
+    @DisplayName("Test company onSubmitButtonClick with malformed inputs")
     void companyTestOnSubmitButtonClickWithMalformedInputs(String input) {
-        FormController myFormController = new FormController();
-
-        clickOn("#company");
-        write(input);
-
-        clickOn("#submitButton");
-        assertEquals(input, myFormController.company.getText());
+        formController.company.setText(input);
+        formController.onSubmitButtonClick();
+        assertEquals(input, formController.company.getText());
     }
 
-
-    //role
     @ParameterizedTest
-    @ValueSource(strings = {
-//            null, // null string
-            "", // empty string
-            " ", // whitespace string
-            "\t\n\r", // control characters string
-            "a" + "\0" + "b", // string with null character
-            "This is a very long string that exceeds the maximum length allowed for the field", // string that is too long
-            "This string contains some invalid characters such as @#$%^&*()", // string with non-alphanumeric characters
-            "This string has a mismatched quote'", // string with unbalanced quotes
-            "This string has an escape sequence \\", // string with incomplete escape sequence
-            "This string has a non-ASCII character é", // string with non-ASCII character
-    })
+    @MethodSource("malformedStrings")
+    @DisplayName("Test role onSubmitButtonClick with malformed inputs")
     void roleTestOnSubmitButtonClickWithMalformedInputs(String input) {
-        FormController myFormController = new FormController();
-
-        clickOn("#role");
-        write(input);
-
-        clickOn("#submitButton");
-        assertEquals(input, myFormController.role.getText());
+        formController.role.setText(input);
+        formController.onSubmitButtonClick();
+        assertEquals(input, formController.role.getText());
     }
 
-    //description
     @ParameterizedTest
-    @ValueSource(strings = {
-//            null, // null string
-            "", // empty string
-            " ", // whitespace string
-            "\t\n\r", // control characters string
-            "a" + "\0" + "b", // string with null character
-            "This is a very long string that exceeds the maximum length allowed for the field", // string that is too long
-            "This string contains some invalid characters such as @#$%^&*()", // string with non-alphanumeric characters
-            "This string has a mismatched quote'", // string with unbalanced quotes
-            "This string has an escape sequence \\", // string with incomplete escape sequence
-            "This string has a non-ASCII character é", // string with non-ASCII character
-    })
+    @MethodSource("malformedStrings")
+    @DisplayName("Test description onSubmitButtonClick with malformed inputs")
     void descriptionTestOnSubmitButtonClickWithMalformedInputs(String input) {
-        FormController myFormController = new FormController();
-
-        clickOn("#description");
-        write(input);
-
-        clickOn("#submitButton");
-        assertEquals(input, myFormController.description.getText());
+        formController.description.setText(input);
+        formController.onSubmitButtonClick();
+        assertEquals(input, formController.description.getText());
     }
 
-
-    //education
     @ParameterizedTest
-    @ValueSource(strings = {
-//            null, // null string
-            "", // empty string
-            " ", // whitespace string
-            "\t\n\r", // control characters string
-            "a" + "\0" + "b", // string with null character
-            "This is a very long string that exceeds the maximum length allowed for the field", // string that is too long
-            "This string contains some invalid characters such as @#$%^&*()", // string with non-alphanumeric characters
-            "This string has a mismatched quote'", // string with unbalanced quotes
-            "This string has an escape sequence \\", // string with incomplete escape sequence
-            "This string has a non-ASCII character é", // string with non-ASCII character
-    })
+    @MethodSource("malformedStrings")
+    @DisplayName("Test education onSubmitButtonClick with malformed inputs")
     void educationTestOnSubmitButtonClickWithMalformedInputs(String input) {
-        FormController myFormController = new FormController();
-
-        clickOn("#education");
-        write(input);
-
-        clickOn("#submitButton");
-        assertEquals(input, myFormController.education.getText());
+        formController.education.setText(input);
+        formController.onSubmitButtonClick();
+        assertEquals(input, formController.education.getText());
     }
 
-
-    //schoolYears
     @ParameterizedTest
-    @ValueSource(strings = {
-//            null, // null string
-            "", // empty string
-            " ", // whitespace string
-            "\t\n\r", // control characters string
-            "a" + "\0" + "b", // string with null character
-            "This is a very long string that exceeds the maximum length allowed for the field", // string that is too long
-            "This string contains some invalid characters such as @#$%^&*()", // string with non-alphanumeric characters
-            "This string has a mismatched quote'", // string with unbalanced quotes
-            "This string has an escape sequence \\", // string with incomplete escape sequence
-            "This string has a non-ASCII character é", // string with non-ASCII character
-    })
+    @MethodSource("malformedStrings")
+    @DisplayName("Test schoolYears onSubmitButtonClick with malformed inputs")
     void schoolYearsTestOnSubmitButtonClickWithMalformedInputs(String input) {
-        FormController myFormController = new FormController();
-
-        clickOn("#schoolYears");
-        write(input);
-
-        clickOn("#submitButton");
-        assertEquals(input, myFormController.schoolYears.getText());
+        formController.schoolYears.setText(input);
+        formController.onSubmitButtonClick();
+        assertEquals(input, formController.schoolYears.getText());
     }
 
-    //degree
     @ParameterizedTest
-    @ValueSource(strings = {
-//            null, // null string
-            "", // empty string
-            " ", // whitespace string
-            "\t\n\r", // control characters string
-            "a" + "\0" + "b", // string with null character
-            "This is a very long string that exceeds the maximum length allowed for the field", // string that is too long
-            "This string contains some invalid characters such as @#$%^&*()", // string with non-alphanumeric characters
-            "This string has a mismatched quote'", // string with unbalanced quotes
-            "This string has an escape sequence \\", // string with incomplete escape sequence
-            "This string has a non-ASCII character é", // string with non-ASCII character
-    })
+    @MethodSource("malformedStrings")
+    @DisplayName("Test degree onSubmitButtonClick with malformed inputs")
     void degreeTestOnSubmitButtonClickWithMalformedInputs(String input) {
-        FormController myFormController = new FormController();
-
-        clickOn("#degree");
-        write(input);
-
-        clickOn("#submitButton");
-        assertEquals(input, myFormController.degree.getText());
+        formController.degree.setText(input);
+        formController.onSubmitButtonClick();
+        assertEquals(input, formController.degree.getText());
     }
 
-
-    //school
     @ParameterizedTest
-    @ValueSource(strings = {
-//            null, // null string
-            "", // empty string
-            " ", // whitespace string
-            "\t\n\r", // control characters string
-            "a" + "\0" + "b", // string with null character
-            "This is a very long string that exceeds the maximum length allowed for the field", // string that is too long
-            "This string contains some invalid characters such as @#$%^&*()", // string with non-alphanumeric characters
-            "This string has a mismatched quote'", // string with unbalanced quotes
-            "This string has an escape sequence \\", // string with incomplete escape sequence
-            "This string has a non-ASCII character é", // string with non-ASCII character
-    })
+    @MethodSource("malformedStrings")
+    @DisplayName("Test school onSubmitButtonClick with malformed inputs")
     void schoolTestOnSubmitButtonClickWithMalformedInputs(String input) {
-        FormController myFormController = new FormController();
-
-        clickOn("#school");
-        write(input);
-
-        clickOn("#submitButton");
-        assertEquals(input, myFormController.school.getText());
+        formController.school.setText(input);
+        formController.onSubmitButtonClick();
+        assertEquals(input, formController.school.getText());
     }
 
-
-    //major
     @ParameterizedTest
-    @ValueSource(strings = {
-//            null, // null string
-            "", // empty string
-            " ", // whitespace string
-            "\t\n\r", // control characters string
-            "a" + "\0" + "b", // string with null character
-            "This is a very long string that exceeds the maximum length allowed for the field", // string that is too long
-            "This string contains some invalid characters such as @#$%^&*()", // string with non-alphanumeric characters
-            "This string has a mismatched quote'", // string with unbalanced quotes
-            "This string has an escape sequence \\", // string with incomplete escape sequence
-            "This string has a non-ASCII character é", // string with non-ASCII character
-    })
+    @MethodSource("malformedStrings")
+    @DisplayName("Test major onSubmitButtonClick with malformed inputs")
     void majorTestOnSubmitButtonClickWithMalformedInputs(String input) {
-        FormController myFormController = new FormController();
-
-        clickOn("#major");
-        write(input);
-
-        clickOn("#submitButton");
-        assertEquals(input, myFormController.major.getText());
+        formController.major.setText(input);
+        formController.onSubmitButtonClick();
+        assertEquals(input, formController.major.getText());
     }
 
-
-    //gpa
     @ParameterizedTest
-    @ValueSource(strings = {
-//            null, // null string
-            "", // empty string
-            " ", // whitespace string
-            "\t\n\r", // control characters string
-            "a" + "\0" + "b", // string with null character
-            "This is a very long string that exceeds the maximum length allowed for the field", // string that is too long
-            "This string contains some invalid characters such as @#$%^&*()", // string with non-alphanumeric characters
-            "This string has a mismatched quote'", // string with unbalanced quotes
-            "This string has an escape sequence \\", // string with incomplete escape sequence
-            "This string has a non-ASCII character é", // string with non-ASCII character
-    })
+    @MethodSource("malformedStrings")
+    @DisplayName("Test gpa onSubmitButtonClick with malformed inputs")
     void gpaTestOnSubmitButtonClickWithMalformedInputs(String input) {
-        FormController myFormController = new FormController();
-
-        clickOn("#gpa");
-        write(input);
-
-        clickOn("#submitButton");
-        assertEquals(input, myFormController.gpa.getText());
+        formController.gpa.setText(input);
+        formController.onSubmitButtonClick();
+        assertEquals(input, formController.gpa.getText());
     }
 
-
-    //status
     @ParameterizedTest
-    @ValueSource(strings = {
-//            null, // null string
-            "", // empty string
-            " ", // whitespace string
-            "\t\n\r", // control characters string
-            "a" + "\0" + "b", // string with null character
-            "This is a very long string that exceeds the maximum length allowed for the field", // string that is too long
-            "This string contains some invalid characters such as @#$%^&*()", // string with non-alphanumeric characters
-            "This string has a mismatched quote'", // string with unbalanced quotes
-            "This string has an escape sequence \\", // string with incomplete escape sequence
-            "This string has a non-ASCII character é", // string with non-ASCII character
-    })
+    @MethodSource("malformedStrings")
+    @DisplayName("Test status onSubmitButtonClick with malformed inputs")
     void statusTestOnSubmitButtonClickWithMalformedInputs(String input) {
-        FormController myFormController = new FormController();
-
-        clickOn("#status");
-        write(input);
-
-        clickOn("#submitButton");
-        assertEquals(input, myFormController.status.getText());
+        formController.status.setText(input);
+        formController.onSubmitButtonClick();
+        assertEquals(input, formController.status.getText());
     }
-
-
-
-    /*
-    @Test
-    void FirstNameNullValue() {
-
-        FormController myFormController = new FormController();
-
-        clickOn("#firstName");
-        write(null);
-
-        // submit form
-        clickOn("#submitButton");
-
-        // expected
-
-        // actual
-
-        //assertEquals(null, myFormController.firstName.getText());
-        assertNull(myFormController.firstName.getText());
-    }
-
-
-
-    @Test
-    void IsFirstNameGreaterThanOneChar() {
-        FormController myFormController = new FormController();
-        clickOn("#firstName");
-        write("John");
-
-        // submit form
-        clickOn("#submitButton");
-
-        String firstNameValue = myFormController.firstName.getText();
-        assertEquals("John", firstNameValue);
-    }
-
-    // null
-
-    @Test
-    void isFirstNameEmptyString()
-    {
-        FormController myFormController = new FormController();
-        clickOn("#firstName");
-        write("");
-
-        // submit form
-        clickOn("#submitButton");
-        String firstNameValue = myFormController.firstName.getText();
-        assertEquals("", firstNameValue);
-    }
-    // empty string
-    // unexpected characters
-    //
-
-    @Test
-    void FirstNameContainsSpecialCharactersOrNumbers()
-    {
-        FormController myFormController = new FormController();
-        clickOn("#firstName");
-        write("@#$%^*");
-    }
-
-
-     */
-}
-
-    @Test
-    @DisplayName("gpa text field is not null")
-    void gpaShouldNotBeNullWhenInitialized() {
-        assertNotNull(formController.gpa);
-    }
-
-    @Test
-    @DisplayName("status text field is not null")
-    void statusShouldNotBeNullWhenInitialized() {
-        assertNotNull(formController.status);
-    }
-
-    @Test
-    @DisplayName("submitLabel label is not null")
-    void submitLabelShouldNotBeNullWhenInitialized() {
-        assertNotNull(formController.submitLabel);
-    }
-
-    @Test
-    @DisplayName("submitButton button is not null")
-    void submitButtonShouldNotBeNullWhenInitialized() {
-        assertNotNull(formController.submitButton);
-    }
-    //*/
 
     @Test
     @DisplayName("Test exportPdf method")
     void testExportPdf() {
         formController.firstName.setText("John");
         formController.lastName.setText("Doe");
-        formController.address.setText("123 Street St.")
+        formController.addressStreet.setText("123 Street St.");
+        formController.addressUnit.setText("Apt. 123");
+        formController.addressCity.setText("City");
+        formController.addressZip.setText("12345");
+        formController.contactInfo.setText("John Doe");
+        formController.email.setText("abc@google.com");
+        formController.linkedin.setText("linkedin.com/in/johndoe");
+        formController.github.setText("github.com/johndoe");
+        formController.phone.setText("123-456-7890");
+        formController.workHistory.setText("Software Engineer");
+        formController.workYears.setText("5");
+        formController.company.setText("Google");
+        formController.role.setText("Software Engineer");
+        formController.description.setText("Developed software");
+        formController.education.setText("B.S. Computer Science");
+        formController.schoolYears.setText("4");
+        formController.degree.setText("B.S.");
+        formController.school.setText("University of Kansas");
+        formController.major.setText("Computer Science");
+        formController.gpa.setText("3.5");
+        formController.status.setText("Graduated");
+        formController.onSubmitButtonClick();
+
+        Document pdf = formController.exportPdf();
     }
 }

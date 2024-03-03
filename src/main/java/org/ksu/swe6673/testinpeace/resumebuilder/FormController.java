@@ -1,5 +1,7 @@
 package org.ksu.swe6673.testinpeace.resumebuilder;
 
+import com.itextpdf.text.Document;
+
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -63,6 +65,11 @@ public class FormController {
     @FXML
     protected void onSubmitButtonClick() {
         submitLabel.setText("Submitted");
+    }
+
+    public Document exportPdf() {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'exportPdf'");
     }
 
 }
