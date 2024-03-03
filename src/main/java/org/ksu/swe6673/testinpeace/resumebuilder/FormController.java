@@ -3,49 +3,56 @@ package org.ksu.swe6673.testinpeace.resumebuilder;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 
 public class FormController {
     @FXML
-    TextField firstName = new TextField("Default First Name");
+    TextField firstName;
     @FXML
-    TextField lastName = new TextField("Default Last Name");
+    TextField lastName;
     @FXML
-    TextField address = new TextField("Default Address");
+    TextField addressStreet;
     @FXML
-    TextField contactInfo = new TextField("Default Contact Info");
+    TextField addressUnit;
     @FXML
-    TextField email = new TextField("Default email");
+    TextField addressCity;
     @FXML
-    TextField linkedin = new TextField("Default LinkedIn");
+    TextField addressZip;
     @FXML
-    TextField github = new TextField("Default Github");
+    TextField contactInfo;
     @FXML
-    TextField phone = new TextField("Default Phone");
+    TextField email;
     @FXML
-    TextField workHistory = new TextField("Default Work History");
+    TextField linkedin;
     @FXML
-    TextField workYears = new TextField("Default Years");
+    TextField github;
     @FXML
-    TextField company = new TextField("Default Company");
+    TextField phone;
     @FXML
-    TextField role = new TextField("Default Role");
+    TextField workHistory;
     @FXML
-    TextField description = new TextField("Default Description");
+    TextField workYears;
     @FXML
-    TextField education = new TextField("Default Education");
+    TextField company;
     @FXML
-    TextField schoolYears = new TextField("Default School Years");
+    TextField role;
     @FXML
-    TextField degree = new TextField("Default Degree");
+    TextArea description;
     @FXML
-    TextField school = new TextField("Default School");
+    TextField education;
     @FXML
-    TextField major = new TextField("Default Major");
+    TextField schoolYears;
     @FXML
-    TextField gpa = new TextField("Default GPA");
+    TextField degree;
     @FXML
-    TextField status = new TextField("Default Status");
+    TextField school;
+    @FXML
+    TextField major;
+    @FXML
+    TextField gpa;
+    @FXML
+    TextField status;
 
     @FXML
     Label submitLabel;
