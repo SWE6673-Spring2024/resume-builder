@@ -8,19 +8,16 @@ import javafx.stage.Stage;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
+import org.apache.pdfbox.pdmodel.PDDocument;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
-import org.junit.jupiter.params.provider.ArgumentsSource;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.testfx.framework.junit5.ApplicationTest;
-
-import com.itextpdf.text.Document;
 
 import java.util.regex.Pattern;
 import java.util.stream.Stream;
@@ -49,7 +46,6 @@ class FormControllerTest extends ApplicationTest {
         assertNotNull(formController.addressUnit);
         assertNotNull(formController.addressCity);
         assertNotNull(formController.addressZip);
-        assertNotNull(formController.contactInfo);
         assertNotNull(formController.email);
         assertNotNull(formController.linkedin);
         assertNotNull(formController.github);
@@ -105,7 +101,6 @@ class FormControllerTest extends ApplicationTest {
         }
     }
     
-
     private static Stream<Arguments> emailIsProperlyFormatted() {
         // Valid inputs will return true, invalid inputs will return false
         return Stream.of(
@@ -129,7 +124,6 @@ class FormControllerTest extends ApplicationTest {
             assertFalse(actual.matches(pattern));
         }
     }
-
 
     private static Stream<String> malformedStrings() {
         return Stream.of(
@@ -371,8 +365,8 @@ class FormControllerTest extends ApplicationTest {
         formController.status.setText("Graduated");
         formController.onSubmitButtonClick();
 
-        Document pdf = formController.exportPdf();
+        PDDocument pdf = formController.exportPdf();
         assertNotNull(pdf);
-        assertNotNull(pdf.getAccessibleAttributes());
+        assertTrue(pdf.getNumberOfPages() > 0);
     }
 }

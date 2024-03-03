@@ -1,6 +1,6 @@
 package org.ksu.swe6673.testinpeace.resumebuilder;
 
-import com.itextpdf.text.Document;
+import org.apache.pdfbox.pdmodel.PDDocument;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -65,9 +65,8 @@ public class FormController {
         submitLabel.setText("Submitted");
     }
 
-    public Document exportPdf() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'exportPdf'");
+    public PDDocument exportPdf() {
+        return new PDDocument();
     }
 
 }
