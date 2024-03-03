@@ -6,34 +6,90 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.ValueSource;
-import org.testfx.framework.junit5.ApplicationTest;
-import org.testfx.api.FxAssert;
 
 import java.awt.*;
 
 import static org.junit.jupiter.api.Assertions.*;
+class FormControllerTest {
 
-class FormControllerTest extends ApplicationTest {
-
-    @Override
-    public void start(Stage stage) throws Exception {
-        Parent mainNode = FXMLLoader.load(FormController.class.getResource("form.fxml"));
-        stage.setScene(new Scene(mainNode));
-        stage.show();
-        stage.toFront();
-    }
+    private FormController formController;
 
     @BeforeEach
     void setUp() {
+        this.formController = new FormController();
     }
 
     @AfterEach
     void tearDown() {
+    }
+
+    /*
+    @Test
+    @DisplayName("firstName text field is not null")
+    void firstNameShouldNotBeNullWhenInitialized() {
+        assertNotNull(formController.firstName);
+    }
+
+    @Test
+    @DisplayName("lastName text field is not null")
+    void lastNameShouldNotBeNullWhenInitialized() {
+        assertNotNull(formController.lastName);
+    }
+
+    @Test
+    @DisplayName("address text field is not null")
+    void addressShouldNotBeNullWhenInitialized() {
+        assertNotNull(formController.address);
+    }
+
+    @Test
+    @DisplayName("contactInfo text field is not null")
+    void contactInfoShouldNotBeNullWhenInitialized() {
+        assertNotNull(formController.contactInfo);
+    }
+
+    @Test
+    @DisplayName("email text field is not null")
+    void emailShouldNotBeNullWhenInitialized() {
+        assertNotNull(formController.email);
+    }
+
+    @Test
+    @DisplayName("linkedin text field is not null")
+    void linkedinShouldNotBeNullWhenInitialized() {
+        assertNotNull(formController.linkedin);
+    }
+
+    @Test
+    @DisplayName("github text field is not null")
+    void githubShouldNotBeNullWhenInitialized() {
+        assertNotNull(formController.github);
+    }
+
+    @Test
+    @DisplayName("phone text field is not null")
+    void phoneShouldNotBeNullWhenInitialized() {
+        assertNotNull(formController.phone);
+    }
+
+    @Test
+    @DisplayName("workHistory text field is not null")
+    void workHistoryShouldNotBeNullWhenInitialized() {
+        assertNotNull(formController.workHistory);
+    }
+
+    @Test
+    @DisplayName("workYears text field is not null")
+    void workYearsShouldNotBeNullWhenInitialized() {
+        assertNotNull(formController.workYears);
     }
 
     @Test
@@ -58,73 +114,13 @@ class FormControllerTest extends ApplicationTest {
     void firstNameTestOnSubmitButtonClickWithMalformedInputs(String input) {
         FormController myFormController = new FormController();
 
-        myFormController.firstName.setText(input);
-        //clickOn("#firstName");
-        //write(input);
+        clickOn("#firstName");
+        write(input);
 
         clickOn("#submitButton");
         assertEquals(input, myFormController.firstName.getText());
     }
 
-
-    // first name individual tests
-    @Test
-    void firstNameWorksAsExpected() throws Exception {
-         FormController myFormController = new FormController();
-         String actual = myFormController.firstName.getText();
-         myFormController.firstName.setText("fuck you");
-
-        //assertEquals("fuck you", myFormController.firstName.getText());
-        assertEquals("fuck you", actual);
-    }
-
-    @Test
-    void firstNameContainsNumbers() throws Exception {
-        FormController myFormController = new FormController();
-        //myFormController.firstName.setText("JIMM3");
-        String actual = myFormController.firstName.getText();
-        actual.matches(".*\\d+.*");
-
-        assertEquals(actual.matches(".*\\d+.*"), true);
-    }
-
-    @Test
-    void firstNameDoesNotContainNumbers() throws Exception {
-        FormController myFormController = new FormController();
-        //myFormController.firstName.setText("JIM");
-        String actual = myFormController.firstName.getText();
-        actual.matches(".*\\d+.*");
-
-        assertEquals(actual.matches(".*\\d+.*"), false);
-    }
-
-    @Test
-    void firstNameContainSpecialCharacters() throws Exception {
-        FormController myFormController = new FormController();
-
-        //myFormController.firstName.setText("JIM");
-        String actual = myFormController.firstName.getText();
-        actual.contains("!@#$%^&*(){}[]<>?");
-
-        //assertEquals("fuck you", myFormController.firstName.getText());
-        assertEquals(false, actual.contains("!@#$%^&*(){}[]<>?"));
-    }
-
-    @Test
-    void firstNameDoesNotContainSpecialCharacters() throws Exception {
-        FormController myFormController = new FormController();
-
-        //myFormController.firstName.setText("JIM");
-        String actual = myFormController.firstName.getText();
-        actual.contains("!@#$%^&*(){}[]<>?");
-
-        //assertEquals("fuck you", myFormController.firstName.getText());
-        assertEquals(false, actual.contains("!@#$%^&*(){}[]<>?"));
-    }
-
-
-
-/*
     //lastName
     @ParameterizedTest
     @ValueSource(strings = {
@@ -148,43 +144,8 @@ class FormControllerTest extends ApplicationTest {
         clickOn("#submitButton");
         assertEquals(input, myFormController.lastName.getText());
     }
-*/
-// last name individual tests
 
-    @Test
-    void lastNameContainsNumbers() throws Exception {
-        FormController myFormController = new FormController();
-        myFormController.lastName.setText("Sm3th");
-        String actual = myFormController.lastName.getText();
-        actual.matches(".*\\d+.*");
 
-        assertEquals(actual.matches(".*\\d+.*"), true);
-    }
-
-    @Test
-    void lastNameDoesNotContainNumbers() throws Exception {
-        FormController myFormController = new FormController();
-        //myFormController.lastName.setText("Sm3th");
-        String actual = myFormController.lastName.getText();
-        //actual.matches(".*\\d+.*");
-
-        assertEquals(false, actual.matches(".*\\d+.*"));
-    }
-
-    @Test
-    void lastNameContainsSpecialCharacters() throws Exception {
-        FormController myFormController = new FormController();
-
-        myFormController.lastName.setText("todd");
-        String actual = myFormController.firstName.getText();
-        //actual.contains("!@#$%^&*(){}[]<>?");
-        //actual.contains("od");
-
-        //assertEquals(true, actual.contains("!@#$%^&*(){}[]<>?"));
-        assertEquals(true, actual.contains("od"));
-    }
-
-/*
     //address
     @ParameterizedTest
     @ValueSource(strings = {
@@ -605,6 +566,103 @@ class FormControllerTest extends ApplicationTest {
         assertEquals(input, myFormController.status.getText());
     }
 
-*/
 
+
+    /*
+    @Test
+    void FirstNameNullValue() {
+
+        FormController myFormController = new FormController();
+
+        clickOn("#firstName");
+        write(null);
+
+        // submit form
+        clickOn("#submitButton");
+
+        // expected
+
+        // actual
+
+        //assertEquals(null, myFormController.firstName.getText());
+        assertNull(myFormController.firstName.getText());
+    }
+
+
+
+    @Test
+    void IsFirstNameGreaterThanOneChar() {
+        FormController myFormController = new FormController();
+        clickOn("#firstName");
+        write("John");
+
+        // submit form
+        clickOn("#submitButton");
+
+        String firstNameValue = myFormController.firstName.getText();
+        assertEquals("John", firstNameValue);
+    }
+
+    // null
+
+    @Test
+    void isFirstNameEmptyString()
+    {
+        FormController myFormController = new FormController();
+        clickOn("#firstName");
+        write("");
+
+        // submit form
+        clickOn("#submitButton");
+        String firstNameValue = myFormController.firstName.getText();
+        assertEquals("", firstNameValue);
+    }
+    // empty string
+    // unexpected characters
+    //
+
+    @Test
+    void FirstNameContainsSpecialCharactersOrNumbers()
+    {
+        FormController myFormController = new FormController();
+        clickOn("#firstName");
+        write("@#$%^*");
+    }
+
+
+     */
+}
+
+    @Test
+    @DisplayName("gpa text field is not null")
+    void gpaShouldNotBeNullWhenInitialized() {
+        assertNotNull(formController.gpa);
+    }
+
+    @Test
+    @DisplayName("status text field is not null")
+    void statusShouldNotBeNullWhenInitialized() {
+        assertNotNull(formController.status);
+    }
+
+    @Test
+    @DisplayName("submitLabel label is not null")
+    void submitLabelShouldNotBeNullWhenInitialized() {
+        assertNotNull(formController.submitLabel);
+    }
+
+    @Test
+    @DisplayName("submitButton button is not null")
+    void submitButtonShouldNotBeNullWhenInitialized() {
+        assertNotNull(formController.submitButton);
+    }
+    //*/
+
+    @Test
+    @DisplayName("Test exportPdf method")
+    void testExportPdf() {
+        formController.firstName.setText("John");
+        formController.lastName.setText("Doe");
+        formController.address.setText("123 Street St.")
+    }
 }
