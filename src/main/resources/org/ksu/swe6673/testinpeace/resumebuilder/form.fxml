@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.VBox?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.control.TextArea?>
+<VBox alignment="CENTER" spacing="20.0" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="org.ksu.swe6673.testinpeace.resumebuilder.FormController">
+    <padding>
+        <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+    </padding>
+    <HBox>
+        <TextField fx:id="firstName" promptText="First Name" />
+        <TextField fx:id="lastName" promptText="Last Name" />
+    </HBox>
+
+    <TextField fx:id="addressStreet" promptText="Street Address" />
+    <TextField fx:id="addressUnit" promptText="Apartment/Unit" />
+    <TextField fx:id="addressCity" promptText="City" />
+    <TextField fx:id="addressZip" promptText="Zip Code" />
+
+    <TextField fx:id="email" promptText="Email" />
+    <TextField fx:id="linkedin" promptText="LinkedIn" />
+    <TextField fx:id="github" promptText="GitHub" />
+    <TextField fx:id="phone" promptText="Phone Number" />
+
+    <TextField fx:id="workHistory" promptText="Work History" />
+    <TextField fx:id="workYears" promptText="Work Years" />
+    <HBox>
+        <TextField fx:id="company" promptText="Company" />
+        <TextField fx:id="role" promptText="Role" />
+    </HBox>
+
+    <TextArea fx:id="description" promptText="Description" />
+
+    <HBox>
+        <TextField fx:id="education" promptText="Education" />
+        <TextField fx:id="schoolYears" promptText="School Years" />
+    </HBox>
+
+    <HBox>
+        <TextField fx:id="degree" promptText="Degree" />
+        <TextField fx:id="school" promptText="School" />
+    </HBox>
+    <HBox>
+        <TextField fx:id="major" promptText="Major" />
+        <TextField fx:id="gpa" promptText="GPA" />
+        <TextField fx:id="status" promptText="Status" />
+    </HBox>
+
+    <Label fx:id="submitLabel" text="Not Submitted"/>
+    <HBox>
+        <Button fx:id="submitButton" text="Submit" onAction="#onSubmitButtonClick"/>
+        <Button fx:id="resetButton" text="Reset" onAction="#onResetButtonClick"/>
+    </HBox>
+</VBox>
