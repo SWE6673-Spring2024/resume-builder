@@ -7,6 +7,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import org.apache.pdfbox.pdmodel.PDPage;
 
 public class FormController {
     @FXML
@@ -72,8 +73,13 @@ public class FormController {
         reset();
     }
 
+
+
     public void submit() {
         // TODO: save updated form values to inject into PDF
+        TextField textField = new TextField();
+        System.out.println(firstName.getCharacters());
+        firstName.setText(firstName.getText());
         submitLabel.setText("Submitted");
     }
 
@@ -105,7 +111,10 @@ public class FormController {
 
     public PDDocument exportPdf() {
         // TODO: create PDF with form values
-        return new PDDocument();
+        PDDocument doc = new PDDocument();
+        PDPage page = new PDPage();
+        doc.addPage(page);
+        return doc;
     }
 
 
