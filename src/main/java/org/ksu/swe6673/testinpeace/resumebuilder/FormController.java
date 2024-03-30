@@ -79,6 +79,28 @@ public class FormController {
 
     public void reset() {
         // TODO: clear form values
+        firstName.setText(null);
+        lastName.setText(null);
+        addressStreet.setText(null);
+        addressUnit.setText(null);
+        addressZip.setText(null);
+        addressCity.setText(null);
+        email.setText(null);
+        linkedin.setText(null);
+        github.setText(null);
+        phone.setText(null);
+        workHistory.setText(null);
+        workYears.setText(null);
+        company.setText(null);
+        role.setText(null);
+        description.setText(null);
+        education.setText(null);
+        schoolYears.setText(null);
+        degree.setText(null);
+        school.setText(null);
+        gpa.setText(null);
+        status.setText(null);
+        major.setText(null);
     }
 
     public PDDocument exportPdf() {
