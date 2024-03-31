@@ -1,5 +1,9 @@
 package org.ksu.swe6673.testinpeace.resumebuilder;
 
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
+import javafx.scene.input.Clipboard;
+import javafx.scene.input.KeyCode;
 import org.apache.pdfbox.pdmodel.PDDocument;
 
 import javafx.fxml.FXML;
@@ -73,13 +77,33 @@ public class FormController {
         reset();
     }
 
+    static String makeControlCharactersVisible(String s) {
+        if (s == null) {
+            return s;
+        }
 
+        int len = s.length();
+        StringBuilder visible = new StringBuilder(len);
+
+        for (int i = 0; i < len; i++) {
+            char c = s.charAt(i);
+            visible.append(c >= 32 || c == '\n' ? c : (char) (c + 0x2400));
+            visible.append(c >= 32 || c == '\r' ? c : (char) (c + 0x000D));
+            visible.append(c >= 32 || c == '\t' ? c : (char) (c + 0x0009));
+            System.out.println(c);
+        }
+
+        return visible.toString();
+    }
 
     public void submit() {
         // TODO: save updated form values to inject into PDF
-        TextField textField = new TextField();
-        System.out.println(firstName.getCharacters());
-        firstName.setText(firstName.getText());
+//        firstName = new TextField() {
+//            @Override
+//            public void setText(String text) {
+//                replaceSelection(makeControlCharactersVisible(text));
+//            }
+//        };
         submitLabel.setText("Submitted");
     }
 
