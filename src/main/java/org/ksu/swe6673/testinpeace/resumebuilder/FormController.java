@@ -98,12 +98,13 @@ public class FormController {
 
     public void submit() {
         // TODO: save updated form values to inject into PDF
-//        firstName = new TextField() {
-//            @Override
-//            public void setText(String text) {
-//                replaceSelection(makeControlCharactersVisible(text));
-//            }
-//        };
+        firstName = new TextField() {
+            @Override
+            public void paste() {
+                String text = Clipboard.getSystemClipboard().getString();
+                replaceSelection(makeControlCharactersVisible(text));
+            }
+        };
         submitLabel.setText("Submitted");
     }
 
