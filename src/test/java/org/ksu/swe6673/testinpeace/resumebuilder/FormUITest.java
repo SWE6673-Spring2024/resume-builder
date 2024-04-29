@@ -1,6 +1,7 @@
 package org.ksu.swe6673.testinpeace.resumebuilder;
 
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -17,7 +18,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import java.io.IOException;
 import java.util.concurrent.TimeoutException;
 
-class FormUITests extends ApplicationTest {
+class FormUITest extends ApplicationTest {
     @Override
     public void start(Stage stage) throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("form.fxml"));
@@ -26,6 +27,16 @@ class FormUITests extends ApplicationTest {
         stage.show();
         stage.toFront();
     }
+
+    // Headless mode, someday...
+    // @BeforeAll
+    // static void setupHeadlessMode() {
+    // System.setProperty("testfx.robot", "glass");
+    // System.setProperty("testfx.headless", "true");
+    // System.setProperty("prism.order", "sw");
+    // System.setProperty("prism.text", "t2k");
+    // System.setProperty("java.awt.headless", "true");
+    // }
 
     @BeforeEach
     public void setUp() throws Exception {
@@ -120,7 +131,9 @@ class FormUITests extends ApplicationTest {
         clickOn("#major").write("Computer Science");
         clickOn("#gpa").write("3.5");
         clickOn("#status").write("Graduated");
+
         clickOn("#resetButton");
+
         assertNull(lookup("#firstName").queryTextInputControl().getText());
         assertNull(lookup("#lastName").queryTextInputControl().getText());
         assertNull(lookup("#addressStreet").queryTextInputControl().getText());
@@ -172,7 +185,7 @@ class FormUITests extends ApplicationTest {
         clickOn("#status").write("Graduated");
         clickOn("#submitButton");
         // a download dialog should be displayed
-        assertNotNull(lookup("Save As"));
+        assertNotNull(lookup("#saveAs"));
     }
 
 }
