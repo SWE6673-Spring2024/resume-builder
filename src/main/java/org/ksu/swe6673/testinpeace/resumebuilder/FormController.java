@@ -67,6 +67,9 @@ public class FormController {
     Button resetButton;
 
     @FXML
+    Label errorMessage;
+
+    @FXML
     protected void onSubmitButtonClick() {
         submit();
         exportPdf();
@@ -77,39 +80,12 @@ public class FormController {
         reset();
     }
 
-    static String makeControlCharactersVisible(String s) {
-        if (s == null) {
-            return s;
-        }
-
-        int len = s.length();
-        StringBuilder visible = new StringBuilder(len);
-
-        for (int i = 0; i < len; i++) {
-            char c = s.charAt(i);
-            visible.append(c >= 32 || c == '\n' ? c : (char) (c + 0x2400));
-            visible.append(c >= 32 || c == '\r' ? c : (char) (c + 0x000D));
-            visible.append(c >= 32 || c == '\t' ? c : (char) (c + 0x0009));
-            System.out.println(c);
-        }
-
-        return visible.toString();
-    }
-
     public void submit() {
         // TODO: save updated form values to inject into PDF
-        firstName = new TextField() {
-            @Override
-            public void paste() {
-                String text = Clipboard.getSystemClipboard().getString();
-                replaceSelection(makeControlCharactersVisible(text));
-            }
-        };
         submitLabel.setText("Submitted");
     }
 
     public void reset() {
-        // TODO: clear form values
         firstName.setText(null);
         lastName.setText(null);
         addressStreet.setText(null);
@@ -142,7 +118,9 @@ public class FormController {
         return doc;
     }
 
-
-
+    public void validateGPA() {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'validateGPA'");
+    }
 
 }
