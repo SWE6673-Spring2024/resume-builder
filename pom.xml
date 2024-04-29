@@ -14,7 +14,7 @@
         <junit.version>5.10.1</junit.version>
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
-        <javafx.version>17.0.6</javafx.version>
+        <javafx.version>17.0.10</javafx.version>
         <javafx.plugin.version>0.0.8</javafx.plugin.version>
     </properties>
 
