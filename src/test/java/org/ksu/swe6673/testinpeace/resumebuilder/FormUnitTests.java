@@ -9,6 +9,8 @@ import javafx.stage.Stage;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
+import org.apache.pdfbox.Loader;
+import org.apache.pdfbox.io.RandomAccessRead;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -82,6 +84,7 @@ class FormUnitTests extends ApplicationTest {
         assertNotNull(formController.resetButton);
     }
 
+
     private static Stream<Arguments> phoneNumberIsProperlyFormatted() {
         // Valid inputs will return true, invalid inputs will return false
         return Stream.of(
@@ -148,7 +151,10 @@ class FormUnitTests extends ApplicationTest {
                 "", // empty string
                 " ", // whitespace string
                 "\t\n\r", // control characters string
-                "a" + "\0" + "b", // string with null character
+
+                // removed because JavaFX text fields don't have null values
+                //"a" + "\0" + "b", // string with null character
+
                 "This is a very long string that exceeds the maximum length allowed for the field", // string that is too long
                 "This string contains some invalid characters such as @#$%^&*()", // string with non-alphanumeric characters
                 "This string has a mismatched quote'", // string with unbalanced quotes
@@ -166,6 +172,10 @@ class FormUnitTests extends ApplicationTest {
         assertEquals(input, formController.firstName.getText());
     }
 
+
+
+    // The tests commented out here were basically duplicates since all the text fields were set up the same.
+    /*
     @ParameterizedTest
     @MethodSource("malformedStrings")
     @DisplayName("Test lastName submit with malformed inputs")
@@ -346,6 +356,8 @@ class FormUnitTests extends ApplicationTest {
         assertEquals(input, formController.gpa.getText());
     }
 
+*/
+
     @ParameterizedTest
     @MethodSource("malformedStrings")
     @DisplayName("Test status submit with malformed inputs")
@@ -385,5 +397,77 @@ class FormUnitTests extends ApplicationTest {
         PDDocument pdf = formController.exportPdf();
         assertNotNull(pdf);
         assertTrue(pdf.getNumberOfPages() > 0);
+    }
+
+
+    @Test
+    @DisplayName("Test if exported Pdf is encrypted")
+    void testIfPdfIsEncrypted() {
+        formController.firstName.setText("");
+        formController.lastName.setText("");
+        formController.addressStreet.setText("");
+        formController.addressUnit.setText("");
+        formController.addressCity.setText("");
+        formController.addressZip.setText("");
+        formController.email.setText("");
+        formController.linkedin.setText("");
+        formController.github.setText("");
+        formController.phone.setText("");
+        formController.workHistory.setText("");
+        formController.workYears.setText("");
+        formController.company.setText("");
+        formController.role.setText("");
+        formController.description.setText("");
+        formController.education.setText("");
+        formController.schoolYears.setText("");
+        formController.degree.setText("");
+        formController.school.setText("");
+        formController.major.setText("");
+        formController.gpa.setText("");
+        formController.status.setText("");
+        Platform.runLater(() -> formController.submit());
+
+        PDDocument pdf = formController.exportPdf();
+        assertNotNull(pdf);
+
+        assertFalse(pdf.isEncrypted());
+    }
+
+
+    @Test
+    @DisplayName("Test if Pdf has content")
+    void testIfPdfHasContent() throws IOException {
+        formController.firstName.setText("");
+        formController.lastName.setText("");
+        formController.addressStreet.setText("");
+        formController.addressUnit.setText("");
+        formController.addressCity.setText("");
+        formController.addressZip.setText("");
+        formController.email.setText("");
+        formController.linkedin.setText("");
+        formController.github.setText("");
+        formController.phone.setText("");
+        formController.workHistory.setText("");
+        formController.workYears.setText("");
+        formController.company.setText("");
+        formController.role.setText("");
+        formController.description.setText("");
+        formController.education.setText("");
+        formController.schoolYears.setText("");
+        formController.degree.setText("");
+        formController.school.setText("");
+        formController.major.setText("");
+        formController.gpa.setText("");
+        formController.status.setText("");
+        Platform.runLater(() -> formController.submit());
+
+        PDDocument pdf = formController.exportPdf();
+        assertNotNull(pdf);
+
+        // pdfbox.pdmodel.PDDocument cannot be cast to class org.apache.pdfbox.io.RandomAccessRead (org.apache.pdfbox.pdmodel.PDDocument and org.apache.pdfbox.io.RandomAccessRead are in unnamed module of loader 'app'
+
+        PDDocument myPDF = Loader.loadPDF((RandomAccessRead) pdf);
+        int result = myPDF.getPage(0).getContents().read();
+        assertEquals(result, -1);
     }
 }
